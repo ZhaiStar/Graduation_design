@@ -1,0 +1,139 @@
+{% extends "merchant/base.html" %}
+{% load my_filter %}
+{% block title %}
+    星服装-订单管理
+{% endblock %}
+{% block style %}
+    <link rel="stylesheet" href="/static/customer/css/main.css">
+    <style type="text/css">
+        ul{
+            list-style: none;
+        }
+    </style>
+{% endblock %}
+{% block content %}
+    {% if key %}
+        <h3 class="common_title2">正在查找:"<span style="color: red">{{ key }}</span>"
+            {% if nothing %}
+            ,没有找到该订单
+            {% endif %}
+        </h3>
+        {% else %}
+        <h3 class="common_title2">全部订单</h3>
+        {% endif %}
+    {% for order in order_list %}
+        <ul class="order_list_th w1200 clearfix">
+            <li class="col01">{{ order.order_user.name }}</li>
+            <li class="col01">{{ order.order_time }}</li>
+            <li class="col02">订单号：{{ order.order_number }}</li>
+            {% ifequal order.order_state 0 %}
+                <li class="col02 stress">未支付</li>
+            {% endifequal %}
+            {% ifequal order.order_state 1 %}
+                <li class="col02 stress">未发货</li>
+            {% endifequal %}
+            {% ifequal order.order_state 2 %}
+                <li class="col02 stress">待收货</li>
+            {% endifequal %}
+            {% ifequal order.order_state 3 %}
+                <li class="col02 stress">待签收</li>
+            {% endifequal %}
+            {% ifequal order.order_state 4 %}
+                <li class="col02 stress">拒收</li>
+            {% endifequal %}
+        </ul>
+
+        <table class="order_list_table w1200">
+            <tbody>
+            <tr>
+                <td width="55%">
+                    {% for oi in order.orderinfo_set.all %}
+                        <ul class="order_goods_list clearfix">
+                            <li class="col01"><img src="/static/customer/img/clothes/{{ oi.goods_picture }}"></li>
+                            <li class="col02 fg">{{ oi.goods_name }}<em>{{ oi.goods_price }}元</em></li>
+                            <li class="col03">{{ oi.goods_number }}</li>
+                            <li class="col04">{{ oi.goods_total }}元</li>
+                        </ul>
+                    {% endfor %}
+                </td>
+                <td width="15%">{{ order.order_total }}元</td>
+                {% ifequal order.order_state 0 %}
+                    <td width="15%">待付款</td>
+                    <td width="15%"><a  class="oper_btn">等待付款</a></td>
+                {% endifequal %}
+                {% ifequal order.order_state 1 %}
+                    <td width="15%">未发货</td>
+                    <td width="15%"><a href="/merchant/order_state/{{ order.id }}?operation=send" class="oper_btn">发货</a></td>
+                {% endifequal %}
+                {% ifequal order.order_state 2 %}
+                    <td width="15%">待收货</td>
+                    <td width="15%"><a  class="oper_btn">查看物流</a></td>
+                {% endifequal %}
+                {% ifequal order.order_state 3 %}
+                    <td width="15%">待签收</td>
+                    <td width="15%"><a  class="oper_btn">等待签收</a></td>
+                {% endifequal %}
+                {% ifequal order.order_state 4 %}
+                    <td width="15%">退货</td>
+                    <td width="15%"><a href="#" class="oper_btn">退货进度</a></td>
+                {% endifequal %}
+            </tr>
+            </tbody>
+        </table>
+    {% endfor %}
+    <div class="col-sm-12 col-md-7" style="margin-top: 13px">
+        <div class="dataTables_paginate paging_simple_numbers" id="dataTable_paginate">
+            <ul class="pagination">
+                {% ifequal page_number first %}
+                    <li class="paginate_button page-item previous disabled" id="dataTable_previous">
+                        <a href="/merchant/ordermanage?page={{ p }}" aria-controls="dataTable" data-dt-idx="0" tabindex="0"
+                           class="page-link">上一页</a>
+                    </li>
+                {% else %}
+                    <li class="paginate_button page-item previous" id="dataTable_previous">
+                        <a href="/merchant/ordermanage?page={{ page_number|sub }}" aria-controls="dataTable" data-dt-idx="0" tabindex="0"
+                           class="page-link">上一页</a>
+                    </li>
+                {% endifequal %}
+                {% for p in page_range %}
+
+                    {% ifequal p page_number %}
+                        <li class="paginate_button page-item active">
+                            <a href="/merchant/ordermanage?page={{ p }}" aria-controls="dataTable" data-dt-idx="1" tabindex="0" class="page-link">{{ p }}</a>
+                        </li>
+                    {% else %}
+                        <li class="paginate_button page-item ">
+                            <a href="/merchant/ordermanage?page={{ p }}" aria-controls="dataTable" data-dt-idx="1" tabindex="0"
+                               class="page-link">{{ p }}</a>
+                        </li>
+                    {% endifequal %}
+                {% endfor %}
+                {% ifequal page_number last %}
+                    <li class="paginate_button page-item next disabled" id="dataTable_next">
+                        <a href="/merchant/ordermanage?page={{ p }}" aria-controls="dataTable" data-dt-idx="7" tabindex="0" class="page-link">下一页</a>
+                    </li>
+                    {% else %}
+                    <li class="paginate_button page-item next " id="dataTable_next">
+                        <a href="/merchant/ordermanage?page={{ page_number|add }}" aria-controls="dataTable" data-dt-idx="7" tabindex="0" class="page-link">下一页</a>
+                    </li>
+                {% endifequal %}
+            </ul>
+        </div>
+    </div>
+{% endblock %}
+{% block script %}
+    <script src="/static/merchant/vendor/jquery/jquery.min.js"></script>
+    <script src="/static/merchant/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Core plugin JavaScript-->
+    <script src="/static/merchant/vendor/jquery-easing/jquery.easing.min.js"></script>
+
+    <!-- Custom scripts for all pages-->
+    <script src="/static/merchant/js/sb-admin-2.min.js"></script>
+    <!-- Page level plugins -->
+    <script src="/static/merchant/vendor/datatables/jquery.dataTables.min.js"></script>
+    <script src="/static/merchant/vendor/datatables/dataTables.bootstrap4.min.js"></script>
+
+    <!-- Page level custom scripts -->
+    <script src="/static/merchant/js/demo/datatables-demo.js"></script>
+{% endblock %}

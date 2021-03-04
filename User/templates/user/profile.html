@@ -1,0 +1,43 @@
+{% extends "customer/base.html" %}
+{% block title %}
+    {{ request.COOKIES.email }} 的个人中心
+{% endblock %}
+
+{% block slider-wrap %}
+{% endblock %}
+
+{% block content %}
+<table class="table dataTable">
+            <tr>
+                <td rowspan="3">
+                    <img src="/static/image/timg.jpg" style="width: 300px;height:300px">
+                </td>
+                <td>用户名:</td>
+                <td>{{ user.email }}</td>
+                <td>密码:</td>
+                <td>
+                    <button class="btn btn-warning" data-toggle="modal" data-target="#logoutModal">修改密码</button>
+                </td>
+            </tr>
+    <tr>
+        <td>姓名：</td>
+        <td>{{ user.username }}</td>
+        <td>性别:</td>
+        <td>{{ user.gender }}</td>
+        <td>年龄:</td>
+        <td>{{ user.age }}</td>
+    </tr>
+    <tr>
+        <td>电话:</td>
+        <td>{{ user.phone }}</td>
+        <td>地址:</td>
+        <td colspan="2">{{ user.address }}</td>
+    </tr>
+    <tr>
+        <td colspan="7">
+            <a href="/Shop/set_profile/" class="btn btn-primary btn-block">完善用户信息</a>
+        </td>
+    </tr>
+
+        </table>
+{% endblock %}

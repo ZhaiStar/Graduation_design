@@ -1,0 +1,164 @@
+{% extends "customer/base.html" %}
+{% load my_filter %}
+{% block title %}
+    星服装-用户中心
+{% endblock %}
+{% block slider-wrap %}
+{% endblock %}
+{% block style %}
+    <style type="text/css">
+    .order_list_table td {
+        vertical-align: middle;
+    }
+    </style>
+{% endblock %}
+{% block search_bar %}
+
+{% endblock %}
+{% block center_con %}
+{% endblock %}
+{% block content %}
+	<div class="main_con clearfix" style="margin-top: 39px;border-top: 1px solid;width:1124px">
+		<div class="left_menu_con clearfix">
+			<h3>用户中心</h3>
+			<ul>
+				<li><a href="/customer/ucf/" >· 个人信息</a></li>
+				<li><a href="/customer/uco/" class="active">· 全部订单</a></li>
+				<li><a href="/customer/ucs/">· 收货地址</a></li>
+			</ul>
+		</div>
+		<div class="right_content clearfix" style="width:897px">
+        {% if key %}
+        <h3 class="common_title2">正在查找:"<span style="color: red">{{ key }}</span>"
+            {% if nothing %}
+            ,没有找到该订单
+            {% endif %}
+        </h3>
+        {% else %}
+        <h3 class="common_title2">全部订单</h3>
+        {% endif %}
+        {% if order_list|length > 0 %}
+         {% for order in order_list %}
+				<ul class="order_list_th w978 clearfix">
+					<li class="col01">{{ order.order_time }}</li>
+					<li class="col02">订单号：{{ order.order_number }}</li>
+                    {% ifequal order.order_state 0 %}
+					<li class="col02 stress">未支付</li>
+                    {% endifequal %}
+                    {% ifequal order.order_state 1 %}
+					<li class="col02 stress">未发货</li>
+                    {% endifequal %}
+                    {% ifequal order.order_state 2 %}
+					<li class="col02 stress">待收货</li>
+                    {% endifequal %}
+                    {% ifequal order.order_state 3 %}
+					<li class="col02 stress">待签收</li>
+                    {% endifequal %}
+                    {% ifequal order.order_state 4 %}
+					<li class="col02 stress">拒收</li>
+                    {% endifequal %}
+				</ul>
+
+				<table class="order_list_table w978">
+					<tbody>
+						<tr>
+							<td width="55%">
+                                {% for oi in order.orderinfo_set.all %}
+								<ul class="order_goods_list clearfix">
+									<li class="col01"><img src="/static/customer/img/clothes/{{ oi.goods_picture }}"></li>
+									<li class="col02 fg">
+                                        <a href="/customer/detail/{{ oi.cloth_id }}" title="{{ oi.goods_name }}">
+                                            {{ oi.goods_name|vaild_name }}
+                                        </a>
+                                        <em>{{ oi.goods_price }}元</em>
+                                    </li>
+									<li class="col03">{{ oi.goods_number }}</li>
+									<li class="col04">{{ oi.goods_total }}元</li>
+								</ul>
+                                    {% endfor %}
+							</td>
+							<td width="15%">{{ order.order_total }}元</td>
+                        {% ifequal order.order_state 0 %}
+							<td width="15%">待付款</td>
+							<td width="15%">
+                               <a href="/user/place_order/?order_id={{ order.id }}" class="oper_btn">去付款</a>
+                               <a href="javascript:;" onclick="delorder({{ order.id }})" class="oper_btn">删除</a>
+
+                            </td>
+                        {% endifequal %}
+                        {% ifequal order.order_state 1 %}
+							<td width="15%">未发货</td>
+							<td width="15%">
+                                <a href="#" class="oper_btn">提醒发货</a>
+                            </td>
+                        {% endifequal %}
+                        {% ifequal order.order_state 2 %}
+							<td width="15%">待收货</td>
+							<td width="15%">
+                                <a href="#" class="oper_btn">查看物流</a>
+                            </td>
+                        {% endifequal %}
+                        {% ifequal order.order_state 3 %}
+							<td width="15%">待签收</td>
+							<td width="15%">
+                                <a href="#" class="oper_btn">签收</a>
+                            </td>
+                        {% endifequal %}
+                        {% ifequal order.order_state 4 %}
+							<td width="15%">退货</td>
+							<td width="15%">
+                                <a href="#" class="oper_btn">退货进度</a>
+                            </td>
+                        {% endifequal %}
+						</tr>
+					</tbody>
+				</table>
+				{% endfor %}
+            {% if page_long > 1%}
+            <div class="pagenation" style="width: 980px">
+                <a href="/customer/uco/?page={{ first }}">首页</a>
+                {% if page_number != first %}
+                    <a href="/customer/uco/?page={{ page_number|sub }}">上一页</a>
+                {% endif %}
+                {% for p in page_range %}
+                    {% ifequal page_number p %}
+                    <a href="/customer/uco/?page={{ p }}" class="active">{{ p }}</a>
+                    {% else %}
+                     <a href="/customer/uco/?page={{ p }}">{{ p }}</a>
+                    {% endifequal %}
+                {% endfor %}
+                {% ifnotequal page_number last %}
+                    <a href="/customer/uco/?page={{ page_number|add }}">下一页</a>
+                {% endifnotequal %}
+                <a href="/customer/uco/?page={{ last }}">尾页</a>
+            </div>
+            {% endif %}
+
+            {% else %}
+            <div style="text-align: center;font-size: 20px;margin-top: 30px"><p>暂无订单</p></div>
+        {% endif %}
+
+
+		</div>
+	</div>
+{% endblock %}
+{% block script %}
+    <script type="text/javascript" src="/static/customer/js/vendor/jquery-1.12.4.min.js"></script>
+    <script type="text/javascript">
+    function delorder(obj) {
+        var post_data = {"order_id":obj, "csrfmiddlewaretoken":"{{ csrf_token }}"}
+        $.ajax({
+            url:"/user/delorder/",
+            method:"post",
+            data:post_data,
+            success: function (data) {
+                alert(data["data"]);
+            },
+            error:function (error) {
+                console.log(error);
+            }
+        })
+    }
+    </script>
+{% endblock %}
+

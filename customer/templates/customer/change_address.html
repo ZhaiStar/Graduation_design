@@ -1,0 +1,189 @@
+{% extends "customer/base.html" %}
+{% load my_filter %}
+{% block title %}
+    星服装-修改地址
+{% endblock %}
+
+{% block slider-wrap %}
+{% endblock %}
+{% block style %}
+    <style type="text/css">
+        .default{
+            display: block;
+            width: 80px;
+            height: 30px;
+            line-height: 30px;
+            text-align: center;
+            border: 1px solid #ff5000;
+            border-radius: 3px;
+            background: #ffd6cc;
+            color: #f30;
+            margin: 0 auto;
+        }
+    .setDefault{
+        cursor: pointer;
+    }
+    .setDefault:hover{
+        color: #ff5000;
+    }
+    tr:hover{
+        background: #ebecf0;
+    }
+    .delete{
+        cursor: pointer;
+    }
+    .delete:hover{
+        color: #ff5000;
+    }
+    </style>
+{% endblock %}
+
+{% block content %}
+    <div class="main_con clearfix" style="margin-top: 39px;border-top: 1px solid;width:1124px">
+        <div class="left_menu_con clearfix">
+            <h3>用户中心</h3>
+            <ul>
+                <li><a href="/customer/ucf/">· 个人信息</a></li>
+                <li><a href="/customer/uco/">· 全部订单</a></li>
+                <li><a href="/customer/ucs/" class="active">· 收货地址</a></li>
+            </ul>
+        </div>
+        <div class="right_content clearfix" style="width:897px">
+            <h3 class="common_title2">收货地址</h3>
+            <table class="order_list_table" style="width:897px">
+                <tbody>
+                    <tr style="height: 40px;background-color:#ebecf0;line-height: 40px">
+                        <td width="8%">收货人</td>
+                        <td width="24%">详细地址</td>
+                        <td width="16%">邮编</td>
+                        <td width="16%">手机</td>
+                        <td width="16%">操作</td>
+                        <td width="16%"></td>
+                    </tr>
+                    {% if default_address %}
+                        <tr style="line-height: 40px">
+                            <td width="8%">{{ default_address.receiver }}</td>
+                            <td width="24%">{{ default_address.address }}</td>
+                            <td width="16%">{{ default_address.post_number }}</td>
+                            <td width="16%">{{ default_address.phone|phone }}</td>
+                            <td width="16%">
+                                <a href="/customer/change_address/{{ default_address.id }}">修改</a>
+                            </td>
+                            <td width="16%"><span class="default">默认地址</span></td>
+                        </tr>
+                    {% endif %}
+                    {% for adrs in other_address %}
+                        <tr style="line-height: 40px">
+                            <td width="8%">{{ adrs.receiver }}</td>
+                            <td width="24%">{{ adrs.address }}</td>
+                            <td width="16%">{{ adrs.post_number }}</td>
+                            <td width="16%">{{ adrs.phone|phone }}</td>
+                            <td width="16%">
+                                <a href="/customer/change_address/{{ adrs.id }}">修改</a>
+                                <span style="margin:0 5px">|</span>
+                                <span class="delete" address_id="{{ adrs.id }}">删除</span>
+                            </td>
+                            <td width="16%">
+                                <span class="setDefault" address_id="{{ adrs.id }}">设为默认</span>
+                            </td>
+                        </tr>
+                    {% endfor %}
+
+
+                </tbody>
+            </table>
+            <div class="address">
+                <h3 class="common_title2">修改地址</h3>
+                <div class="site_con">
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="form_group">
+                            <label>收件人：</label>
+                            <input type="text" name="rec" value="{{ old_address.receiver }}">
+                        </div>
+                        <div class="form_group">
+                            <label>详细地址：</label>
+                            <input type="text" name="address" value="{{ old_address.address }}">
+                        </div>
+                        <div class="form_group">
+                            <label>邮编：</label>
+                            <input type="text" name="post_code" value="{{ old_address.post_number }}">
+                        </div>
+                        <div class="form_group">
+                            <label>手机：</label>
+                            <input type="text" name="phone" value="{{ old_address.phone }}">
+                        </div>
+
+                        <input type="submit" name="" value="保存" class="info_submit">
+                        <span style="color: red;">{{ msg }}</span>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block script %}
+    <script type="text/javascript" src="/static/customer/js/vendor/jquery-1.12.4.min.js"></script>
+    <script type="text/javascript">
+        $(".setDefault").each(
+            function () {
+                $(this).click(
+                    function () {
+                        var id = $(this).attr("address_id");
+                        var post_data = {"id": id, "csrfmiddlewaretoken": "{{ csrf_token }}"};
+                        {#console.log(post_data)#}
+                        $.ajax({
+                            url: "/customer/setdefault/",
+                            type: "post",
+                            data: post_data,
+                            success: function (data) {
+                                alert(data["data"]);
+                            },
+                            error: function (error) {
+                                console.log(error);
+                            }
+                        })
+                    }
+                )
+            }
+        );
+        $(".delete").each(
+            function () {
+                $(this).click(
+                    function () {
+                        var id = $(this).attr("address_id");
+                        var post_data = {"id": id, "csrfmiddlewaretoken": "{{ csrf_token }}"};
+                        $.ajax({
+                            url: "/customer/delete/",
+                            type: "post",
+                            data: post_data,
+                            success: function (data) {
+                                alert(data["data"]);
+                            },
+                            error: function (error) {
+                                console.log(error);
+                            }
+                        })
+                    }
+                )
+            }
+        );
+        function list(obj) {
+            var post_data = {"data": obj, "csrfmiddlewaretoken": "{{ csrf_token }}"};
+            console.log(obj);
+            $.ajax({
+                url: "/customer/shopAPI",
+                type: "post",
+                data: post_data,
+                success: function (data) {
+                    alert(data["data"]);
+                },
+                error: function (error) {
+                    console.log(error);
+                }
+            })
+        }
+    </script>
+{% endblock %}
+
+	

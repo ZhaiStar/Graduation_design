@@ -1,0 +1,16 @@
+{% extends "customer/base.html" %}
+
+{% block title %}
+    支付结果
+{% endblock %}
+
+{% block content %}
+    <table>
+    {% for k,v in data.items %}
+        <tr>
+            <th>{{ k }}</th>
+            <td>{{ v }}</td>
+        </tr>
+    {% endfor %}
+    </table>
+{% endblock %}

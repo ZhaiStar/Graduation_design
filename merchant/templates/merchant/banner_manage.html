@@ -1,0 +1,61 @@
+{% extends "merchant/base.html" %}
+{% block search%}
+{% endblock %}
+{% block title %}
+    星服装-轮播图
+{% endblock %}
+{% block content %}
+    <h5>当前轮播图</h5>
+    <table  class="table dataTable">
+        <tbody>
+            <tr>
+                <th>图片</th>
+                <th>标题</th>
+                <th>描述</th>
+                <th>操作</th>
+            </tr>
+            {% for banner in banners %}
+            <tr>
+                <td><img src="/static/{{ banner.picture }}" style="width: 150px"></td>
+                <td>{{ banner.title }}</td>
+                <td>{{ banner.description }}</td>
+                <td>
+                    {% if banner.state == 1 %}
+                        <a href="/merchant/set_state/{{ banner.id }}?type=banner" class="btn btn-danger"
+                               style="color: white">隐藏</a>
+                    {% else %}
+                        <a href="/merchant/set_state/{{ banner.id }}?type=banner" class="btn btn-primary"
+                               style="color: white">显示</a>
+                    {% endif %}
+
+                    <a href="/merchant/change/{{ banner.id }}?type=banner" class="btn btn-primary"
+                               style="color: white">修改</a>
+                    <a href="/merchant/delbanner/{{ banner.id }}" class="btn btn-danger"
+                               style="color: white">删除</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <hr class="sidebar-divider">
+    {% if banner %}
+        <h5>修改轮播图</h5>
+    {% else %}
+        <h5>增加轮播图</h5>
+    {% endif %}
+
+    <hr class="sidebar-divider">
+    <form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+        <p>标题
+        <input class="form-control form-control-user" type="text" name="title" value="{{ banner.title }}"></p>
+        <p>描述
+        <input class="form-control form-control-user" type="text" name="des" value="{{ banner.description }}"></p>
+        <p>链接
+        <input class="form-control form-control-user" type="text" name="url"  value="{{ banner.url }}"></p>
+        <p>图片
+        <input class="form-control form-control-user" type="file" name="picture" value="{{ banner.picture }}" accept="image/*"></p>
+        <input class="btn btn-primary btn-block" type="submit" value="{{ msg }}">
+        <p style="text-align: center;font-size: 13px;color: red;margin-top: 8px;">{{ msg1 }}</p>
+    </form>
+{% endblock %}

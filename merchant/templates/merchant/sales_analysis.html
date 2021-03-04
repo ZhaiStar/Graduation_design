@@ -1,0 +1,208 @@
+{% extends "merchant/base.html" %}
+
+{% block title %}
+    星服装-销量统计
+{% endblock %}
+<!-- Page Heading -->
+{% block label %}
+
+{% endblock %}
+{% block search %}
+{% endblock %}
+{% block content %}
+    <!-- Content Row -->
+    <div class="row">
+
+        <!-- Earnings (Monthly) Card Example -->
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-primary shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">男装销量</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{ male_sum }}</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-calendar fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Earnings (Monthly) Card Example -->
+
+        <!-- Earnings (Monthly) Card Example -->
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-success shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">女装销量
+                            </div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{ female_sum }}</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-calendar fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pending Requests Card Example -->
+    </div>
+
+    <!-- Content Row -->
+
+    <div class="row">
+
+        <!-- Area Chart -->
+        <div class="col-xl-12 col-lg-12">
+            <div class="card shadow mb-4">
+                <!-- Card Header - Dropdown -->
+                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                    <h6 class="m-0 font-weight-bold text-primary">男装</h6>
+                </div>
+                <!-- Card Body -->
+                <div class="card-body">
+                    <div id="male" style="width: 100%;height: 400px;"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pie Chart -->
+        {#        <div class="col-xl-4 col-lg-5">#}
+        {#            <div class="card shadow mb-4">#}
+        {#                <!-- Card Header - Dropdown -->#}
+        {#                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">#}
+        {#                    <h6 class="m-0 font-weight-bold text-primary">饼图</h6>#}
+        {#                </div>#}
+        {##}
+        {#                <!-- Card Body -->#}
+        {#                <div class="card-body">#}
+        {#                    <div id="panel_pie" style="width: 500px;height: 400px;"></div>#}
+        {#                </div>#}
+        {#            </div>#}
+        {#        </div>#}
+    </div>
+    <div class="row">
+        <div class="col-xl-12 col-lg-12">
+            <div class="card shadow mb-4">
+                <!-- Card Header - Dropdown -->
+                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                    <h6 class="m-0 font-weight-bold text-primary">女装</h6>
+                </div>
+                <!-- Card Body -->
+                <div class="card-body">
+                    <div id="female" style="width: 100%;height: 400px;"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 折线图 -->
+    {#    <div class="row">#}
+    {#        <div class="card shadow mb-4">#}
+    {#            <!-- Card Header - Dropdown -->#}
+    {#            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">#}
+    {#                <h6 class="m-0 font-weight-bold text-primary">折线图</h6>#}
+    {#            </div>#}
+    {#            <!-- Card Body -->#}
+    {#            <div class="card-body">#}
+    {#                <div id="line_panel" style="width: 800px;height: 400px;"></div>#}
+    {#            </div>#}
+    {#        </div>#}
+    {#    </div>#}
+{% endblock %}
+
+{% block script %}
+    <script src="/static/merchant/js/echarts.min.js"></script>
+    <script>
+        var post_data = {"csrfmiddlewaretoken": "{{ csrf_token }}"};
+        var result;
+            $.ajax({
+                url: "{% url 'merchant:analysis_data' %}",
+                type: "post",
+                data: post_data,
+                async:false,
+                success: function (data) {
+                    result = data;
+                },
+                error: function (error) {
+                    console.log(error);
+                }
+            });
+        var key1 = [];
+        var value1 = [];
+        var key2 = [];
+        var value2 = [];
+        function get_data() {
+            var male_list = result["male"];
+            var female_list = result["female"];
+            for (var k1 in male_list) {
+                if (male_list.hasOwnProperty(k1)) {
+                    key1.push(k1);
+                    value1.push(male_list[k1]);
+                }
+            }
+            for (var k2 in female_list) {
+                if (female_list.hasOwnProperty(k2)) {
+                    key2.push(k2);
+                    value2.push(female_list[k2]);
+                }
+            }
+        }
+        get_data();
+
+
+        // 男装
+        var maleChart = echarts.init(document.getElementById('male'));
+        var maleoption = {
+            title: {
+                text: "销量",
+                x: "center"
+            },
+            tooltip: {},
+            xAxis: {
+                data: key1,
+                axisLabel:{
+                    interval:0,
+                    rotate:45
+                }
+            },
+
+            yAxis: {},
+            series: [{
+                name: '销量',
+                type: 'bar',
+                data: value1
+            }]
+        };
+        maleChart.setOption(maleoption);
+        // 女装
+        var femaleChart = echarts.init(document.getElementById('female'));
+        var femaleoption = {
+            title: {
+                text: "销量",
+                x: "center"
+            },
+            tooltip: {},
+            xAxis: {
+                data: key2,
+                axisLabel:{
+                    interval:0,
+                    rotate:45
+                }
+            },
+            yAxis: {},
+            series: [{
+                name: '销量',
+                type: 'bar',
+                data: value2
+            }]
+        };
+        femaleChart.setOption(femaleoption);
+
+    </script>
+{% endblock %}

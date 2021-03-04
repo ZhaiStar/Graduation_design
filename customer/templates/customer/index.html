@@ -1,0 +1,441 @@
+{% extends "customer/base.html" %}
+{% load my_filter %}
+{% block search %}
+{% endblock %}
+{% block slider-wrap %}
+    <div class="slider-wrap">
+        <div class="preview-2">
+            <div id="nivoslider" class="slides">
+                {% for banner in banners %}
+                    <img src="/static/{{ banner.picture }}" alt=""
+                         title="#slider-direction-{{ forloop.counter }}"/>
+                {% endfor %}
+                {#<img src="/static/customer/img/slider/2.jpg" alt="" title="#slider-direction-2"/>#}
+            </div>
+            {% for banner in banners %}
+                <!-- direction 1 -->
+                <div id="slider-direction-{{ forloop.counter }}" class="slider-direction">
+                    <div class="banner-content">
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <div class="nivo_text">
+                                        <div class="nivo_text-wrapper">
+                                            <div class="slider-content slider-text-1 text-left">
+                                                <div class="wow bounceInDown" data-wow-duration="3s"
+                                                     data-wow-delay="0.3s">
+                                                    <h2></h2>
+                                                </div>
+                                            </div>
+                                            <div class="slider-content slider-text-2 text-left hidden-xs">
+                                                <div class="wow bounceInDown" data-wow-duration="3s"
+                                                     data-wow-delay="0.3s">
+                                                    <h1>{{ banner.title }}</h1>
+                                                </div>
+                                            </div>
+                                            <div class="slider-content slider-text-3 text-left hidden-xs">
+                                                <div class="wow bounceInDown" data-wow-duration="3s"
+                                                     data-wow-delay="0.3s">
+                                                    <p>{{ banner.description }}</p>
+                                                </div>
+                                            </div>
+                                            <div class="slider-content slider-text-4 text-left hidden-sm hidden-xs">
+                                                <div class="wow bounceInUp" data-wow-duration="3s"
+                                                     data-wow-delay="1s">
+                                                    <a href='{{ banner.url }}' class='slider-button'>查看</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+
+
+        </div>
+    </div>
+{% endblock %}
+{% block content %}
+    <!-- slider bottom start -->
+    <div class="slider-bottom-area mt-10 text-left">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-3 col-sm-6 col-xs-12">
+                    <div class="single-slider-bottom">
+                        <div class="single-slider-bottom-img">
+                            <a ><img src="/static/customer/img/slider-bottom/1.jpg" alt="product"></a>
+                        </div>
+                        <div class="single-slider-info">
+                            <h4 class="text-uppercase">exclusive </h4>
+                            <h2 class="text-uppercase">bag’s</h2>
+                            <h4 class="text-uppercase">COLLECTION </h4>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 col-sm-6 col-xs-12">
+                    <div class="single-slider-bottom">
+                        <div class="single-slider-bottom-img">
+                            <a ><img src="/static/customer/img/slider-bottom/2.jpg" alt="product"></a>
+                        </div>
+                        <div class="single-slider-info">
+                            <h4 class="text-uppercase">EXCLUSIVE </h4>
+                            <h2 class="text-uppercase">shoe’s</h2>
+                            <h4 class="text-uppercase">COLLECTION </h4>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 hidden-sm col-xs-12">
+                    <div class="single-slider-bottom">
+                        <div class="single-slider-bottom-img">
+                            <a ><img src="/static/customer/img/slider-bottom/3.jpg" alt="product"></a>
+                        </div>
+                        <div class="single-slider-info">
+                            <h4 class="text-uppercase">EXCLUSIVE </h4>
+                            <h2 class="text-uppercase">watch</h2>
+                            <h4 class="text-uppercase">for men </h4>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 hidden-sm col-xs-12">
+                    <div class="single-slider-bottom">
+                        <div class="single-slider-bottom-img">
+                            <a ><img src="/static/customer/img/slider-bottom/4.jpg" alt="product"></a>
+                        </div>
+                        <div class="single-slider-info">
+                            <h4 class="text-uppercase">EXCLUSIVE </h4>
+                            <h2 class="text-uppercase">Bag's</h2>
+                            <h4 class="text-uppercase">for women </h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--slider bottom end -->
+    <!-- arrival start-->
+    {#     style="background-color:#EBEBEB"#}
+    <div class="arrival-area clearfix pt-90">
+        <div class="container">
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="section-tab">
+                        <div class="section-tab-menu text-center mb-45">
+                            <ul role="tablist">
+                                <li role="presentation" class="active text-uppercase">
+                                    <a aria-controls="#best" role="tab" data-toggle="tab">热销</a>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="clearfix"></div>
+                        <div class="tab-content row">
+                            <div id="best" role="tabpanel" class="active section-tab-item">
+                                <div class="tab-item-slider">
+                                    {% for cloth in cloth_list %}
+                                        <div class="col-xs-12 col-width">
+                                            <div class="single-product">
+                                                <div class="single-product-item">
+                                                    <div class="single-product-img clearfix hover-effect">
+                                                        <a href="#">
+                                                            <img class="primary-image"
+                                                                 src="/static/customer/img/clothes/{{ cloth.picture|get_picture }}" alt="">
+                                                        </a>
+                                                        <div class="wish-icon-hover text-center clearfix">
+                                                            <div class="hover-text">
+                                                                <p>{{ cloth.title }}</p>
+                                                                <ul>
+                                                                    <li>
+                                                                        <a class="modal-view"
+                                                                           href="/customer/detail/{{ cloth.id }}/">
+                                                                            <i class="fa fa-eye"></i>
+                                                                        </a>
+                                                                    </li>
+                                                                    <li><a class="modal-view">
+                                                                        <i class="fa fa-heart"></i></a>
+                                                                    </li>
+                                                                </ul>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="single-product-info clearfix">
+                                                        <div class="pro-rating" style="width: 209px">
+                                                            <h3 style="font-size: 12px"><a href="/customer/detail/{{ cloth.id }}/">
+                                                                </a></h3>
+                                                        </div>
+{#                                                        <div class="pro-price">#}
+{#                                                            {% if cloth.discount_price > 0 %}#}
+{#                                                                <span class="new-price">￥{{ cloth.discount_price }}</span>#}
+{#                                                                <span class="old-price">￥{{ cloth.price }}</span>#}
+{#                                                            {% else %}#}
+{#                                                                <span class="new-price">￥{{ cloth.price }}</span>#}
+{#                                                            {% endif %}#}
+{#                                                        </div>#}
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {#                    <div class="arrival-button text-center mt-30">#}
+                    {#                        <a href='#' class='section-button'>更多</a>#}
+                    {#                    </div>#}
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- arrival end -->
+    <!-- featured start -->
+    <!-- featured end -->
+
+    <!-- women area start -->
+    <div class="women-area ptb-90">
+        <div class="container">
+            <div class="row">
+                <div class="col-xs-7">
+                    <div class="section-tab">
+                        <div class="section-tab-menu mb-45 text-center">
+                            <ul role="tablist">
+                                <li role="presentation" class="active text-uppercase">
+                                    <a  aria-controls="dress" role="tab" data-toggle="tab">新品女装</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-7">
+                    <div class="clearfix"></div>
+                    <div class="tab-content row">
+                        <div id="dress" role="tabpanel" class="active section-tab-item">
+                            <div class="feature-slider">
+                                {% for female in female_new %}
+                                    <div class="col-xs-12 col-width">
+                                        <div class="single-product">
+                                            <div class="single-product-item clearfix">
+                                                <div class="single-product-img clearfix">
+                                                    <a href="#">
+                                                        <img class="primary-image"
+                                                             src="/static/customer/img/clothes/{{ female.picture|get_picture }}"
+                                                             alt="">
+                                                    </a>
+                                                    <div class="wish-icon-hover text-center clearfix">
+                                                        <div class="hover-text">
+                                                            <p class="hidden-md">{{ female.title }}</p>
+                                                            <ul>
+                                                                <li><a class="modal-view" href="/customer/detail/{{ female.id }}/">
+                                                                    <i class="fa fa-eye"></i></a>
+                                                                </li>
+                                                                <li><a class="modal-view">
+                                                                    <i class="fa fa-heart"></i></a>
+                                                                </li>
+                                                            </ul>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="single-product-info clearfix">
+                                                    <div class="pro-rating" style="width: 209px">
+                                                            <h3 style="font-size: 12px"><a href="/customer/detail/{{ female.id }}/">
+                                                                </a></h3>
+                                                        </div>
+{#                                                    <div class="pro-price">#}
+{#                                                        {% if female.discount_price > 0 %}#}
+{#                                                            <span class="new-price">￥{{ female.discount_price }}</span>#}
+{#                                                            <span class="old-price">￥{{ female.price }}</span>#}
+{#                                                        {% else %}#}
+{#                                                            <span class="new-price">￥{{ female.price }}</span>#}
+{#                                                        {% endif %}#}
+{#                                                    </div>#}
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="arrival-button text-center mt-30">
+                        <a href='/customer/shop/?pinlei=female' class='section-button'>更多</a>
+                    </div>
+                </div>
+                <div class="col-md-5 hidden-sm hidden-xs">
+                    <div class="featured-left mt-2 pull-right">
+                        <a href="/customer/shop/?pinlei=female">
+                            <img src="/static/customer/img/product/b2.jpg" alt="">
+                            <div class="feature-info text-right">
+                                <h2 class="text-uppercase">women's</h2>
+                                <h3 class="text-uppercase">collection</h3>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- women area end -->
+    <!-- offer area start -->
+    <!-- offer area end -->
+    <!-- men area start -->
+    <div class="men-area ptb-90">
+        <div class="container">
+            <div class="row">
+                <div class="col-xs-7" style="float:right;">
+                    <div class="section-tab">
+                        <div class="section-tab-menu mb-45 text-center">
+                            <ul role="tablist">
+                                <li role="presentation" class="active text-uppercase">
+                                    <a  aria-controls="accessories" role="tab"
+                                       data-toggle="tab">新品男装</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-5 hidden-sm hidden-xs">
+                    <div class="featured-left mt-2">
+                        <a href="/customer/shop/?pinlei=male">
+                            <img src="/static/customer/img/product/b3.jpg" alt="">
+                            <div class="feature-info text-left">
+                                <h2 class="text-uppercase">men's</h2>
+                                <h3 class="text-uppercase">collection</h3>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+                <div class="col-md-7">
+                    <div class="clearfix"></div>
+                    <div class="tab-content row">
+                        <div id="accessories" role="tabpanel" class="active section-tab-item">
+                            <div class="feature-slider">
+                                {% for male in male_new %}
+                                    <div class="col-xs-12 col-width">
+                                    <div class="single-product">
+                                        <div class="single-product-item clearfix">
+                                            <div class="single-product-img clearfix">
+                                                <a href="#">
+                                                    <img class="primary-image" src="/static/customer/img/clothes/{{ male.picture|get_picture }}"
+                                                         alt="">
+                                                </a>
+                                                <div class="wish-icon-hover text-center clearfix">
+                                                    <div class="hover-text">
+                                                        <p class="hidden-md">{{ male.title }}</p>
+                                                        <ul>
+                                                            <li><a class="modal-view" href="/customer/detail/{{ male.id }}/">
+                                                                <i class="fa fa-eye"></i></a>
+                                                            </li>
+                                                            <li><a class="modal-view">
+                                                                <i class="fa fa-heart"></i></a>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="single-product-info clearfix">
+                                                <div class="pro-rating" style="width: 209px">
+                                                    <h3 style="font-size: 12px"><a href="/customer/detail/{{ male.id }}/">
+                                                        </a></h3>
+                                                </div>
+{#                                                <div class="pro-price">#}
+{#                                                    {% if male.discount_price > 0 %}#}
+{#                                                        <span class="new-price">￥{{ male.discount_price }}</span>#}
+{#                                                        <span class="old-price">￥{{ male.price }}</span>#}
+{#                                                    {% else %}#}
+{#                                                        <span class="new-price">￥{{ male.price }}</span>#}
+{#                                                    {% endif %}#}
+{#                                                </div>#}
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="arrival-button text-center mt-30">
+                        <a href='/customer/shop/?pinlei=male' class='section-button'>更多</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- men area end -->
+
+
+
+
+    <!-- service area end -->
+    <div class="service-area mb-10">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-3 col-sm-4 col-xs-12">
+                    <div class="single-service text-center">
+                        <div class="single-service-content ptb-40">
+                            <div class="single-service-icon-wrapper">
+                                <div class="single-service-icon">
+                                    <img src="/static/customer/img/icon/5.png" alt="">
+                                </div>
+                            </div>
+                            <div class="single-service-info">
+                                <h4 class="text-uppercase">免运费</h4>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 col-sm-4 col-xs-12">
+                    <div class="single-service text-center">
+                        <div class="single-service-content ptb-40">
+                            <div class="single-service-icon-wrapper">
+                                <div class="single-service-icon">
+                                    <img src="/static/customer/img/icon/7.png" alt="">
+                                </div>
+                            </div>
+                            <div class="single-service-info">
+                                <h4 class="text-uppercase">在线下单</h4>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 col-sm-4 col-xs-12">
+                    <div class="single-service text-center">
+                        <div class="single-service-content ptb-40">
+                            <div class="single-service-icon-wrapper">
+                                <div class="single-service-icon">
+                                    <img src="/static/customer/img/icon/9.png" alt="">
+                                </div>
+                            </div>
+                            <div class="single-service-info">
+                                <h4 class="text-uppercase">七天包退</h4>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 hidden-sm col-xs-12">
+                    <div class="single-service text-center">
+                        <div class="single-service-content ptb-40">
+                            <div class="single-service-icon-wrapper">
+                                <div class="single-service-icon">
+                                    <img src="/static/customer/img/icon/10.png" alt="">
+                                </div>
+                            </div>
+                            <div class="single-service-info">
+                                <h4 class="text-uppercase">赠送礼品</h4>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- service area end -->
+
+{% endblock %}

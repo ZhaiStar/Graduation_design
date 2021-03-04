@@ -1,0 +1,129 @@
+{% extends "customer/base.html" %}
+{% load my_filter %}
+{% block title %}
+    星服装-用户中心
+{% endblock %}
+{% block slider-wrap %}
+{% endblock %}
+
+{% block search %}
+{% endblock %}
+{% block style %}
+    {% if change %}
+    <style type="text/css">
+        .user_info_list li{
+            height: 45px;
+        }
+    </style>
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+    <div class="main_con clearfix" style="margin-top: 39px;border-top: 1px solid;width:1124px">
+        <div class="left_menu_con clearfix">
+            <h3>用户中心</h3>
+            <ul>
+                <li><a href="/customer/ucf/" class="active">· 个人信息</a></li>
+                <li><a href="/customer/uco/">· 全部订单</a></li>
+                <li><a href="/customer/ucs/">· 收货地址</a></li>
+            </ul>
+        </div>
+        <div class="right_content clearfix" style="width:897px">
+            <div class="info_con clearfix">
+                <h3 class="common_title2">基本信息</h3>
+
+                    {% if change %}
+                        <form method="post">
+                        {% csrf_token %}
+                        <ul class="user_info_list" style="height: 150px;width: 897px;">
+                            <li><label><span>用户名：</span>
+                                <input type="text" name="name" value="{{ user.name }}">
+                            </label></li>
+                            <li><label><span>联系方式：</span>
+                                <input type="text" name="phone" value="{{ user.phone }}">
+                            </label></li>
+                            <li><label><span>地址：</span>
+                                {% if user.address %}
+                                    <input type="text" name="address" value="{{ user.address }}">
+                                {% else %}
+                                    <input type="text" name="address" value="">
+                                {% endif %}
+                            </label>
+                                <input style="margin-left: 90px;display: unset"
+                                       class="btn btn-warning" type="submit"  value="{{ msg }}">
+                            </li>
+                        </ul>
+                        </form>
+                        {% else %}
+                        <ul class="user_info_list" style="height: 110px;width: 897px;">
+                            <li><span>用户名：</span>{{ user.name }}</li>
+                            <li><span>联系方式：</span>{{ user.phone|phone }}</li>
+                            <li><span>地址：</span>
+                                {% if user.address %}
+                                    {{ user.address }}
+                                {% else %}
+                                    暂无
+                                {% endif %}
+                                <a href="{% url 'customer:changeinfo' %}" style="margin-left: 90px;display: unset" class="btn btn-warning">{{ msg }}</a>
+                            </li>
+                        </ul>
+                    {% endif %}
+            </div>
+
+            <h3 class="common_title2">最近浏览</h3>
+            <div class="has_view_list">
+                <ul class="goods_type_list clearfix">
+                {% if history|length > 0 %}
+                {% for h in history %}
+                    <li>
+                        <a href="/customer/detail/{{ h.goods_id }}/">
+                            <img src="/static/customer/img/clothes/{{ h.goods_picture }}">
+                        </a>
+                        <h4><a href="detail.html">{{ h.goods_name }}</a></h4>
+                        <div class="operate">
+                            <span class="prize" style="font-size: 12px">原价:￥{{ h.goods_price|get_price|safe }}</span>
+
+                        </div>
+                    </li>
+                    {% endfor %}
+                    {% else %}
+                    <div style="margin-top: 36px;font-size: 20px;text-align: center"><p>暂无浏览记录</p></div>
+                {% endif %}
+
+                </ul>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block script %}
+    <script>
+    function add_cart(obj) {
+        var post_data = {"goods_id": obj, "csrfmiddlewaretoken": "{{ csrf_token }}"};
+        console.log(obj);
+        $.ajax({
+            url: "/user/addcart/",
+            type: "post",
+            data: post_data,
+            success: function (data) {
+                alert(data["data"]);
+            },
+            error: function (error) {
+                console.log(error);
+            }
+        })
+        }
+        $("input[type='text']").each(function () {
+            $(this).blur(function () {
+                var data = $(this).val();
+                console.log(data.length)
+            if(data.length==0){
+                $("input[type='submit']").attr("disabled","disabled");
+            }else{
+                $("input[type='submit']").removeAttr("disabled");
+            }
+        })
+        })
+    </script>
+{% endblock %}
+
+

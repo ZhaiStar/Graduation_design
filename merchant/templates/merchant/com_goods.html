@@ -1,0 +1,107 @@
+{% extends "merchant/base.html" %}
+{% block search %}
+{% endblock %}
+{% block title %}
+    星服装-商品管理
+{% endblock %}
+{% block content %}
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <p>{% if change %}商品名称{% endif %}
+            <input class="form-control form-control-user" type="text" name="title" placeholder="商品名称" value="{{ cloth.title }}">
+        </p>
+        <p>{% if change %}商品价格{% endif %}
+            <input class="form-control form-control-user" type="number" step="0.1" name="price" placeholder="价格" value="{{ cloth.price }}">
+        </p>
+        <p>{% if change %}颜色{% endif %}
+            <input class="form-control form-control-user" type="text" name="color" placeholder="颜色(请用“，”分隔)" value="{{ cloth.color }}">
+        </p>
+        <p>{% if change %}商品数量{% endif %}
+            <input class="form-control form-control-user" type="number" name="number" placeholder="数量" value="{{ cloth.number }}">
+        </p>
+        <p>
+            {% if add %}
+                <input class="form-control form-control-user" type="text" name="code" placeholder="货号">
+            {% endif %}
+        </p>
+        <p>
+            {% if add %}
+                <input class="form-control form-control-user" type="number" name="weight" placeholder="重量">
+            {% endif %}
+        </p>
+        <p>
+            {% if change %}上架时间
+                <input class="form-control form-control-user" type="date" name="date" placeholder="上架时间" value="{{ cloth.date }}">
+            {% endif %}
+        </p>
+        <p>{% if change %}优惠价{% endif %}
+            <input class="form-control form-control-user" type="number" step="0.1" name="discount" placeholder="优惠价" value="{{ cloth.discount_price }}">
+        </p>
+        <p>{% if change %}状态{% endif %}
+            <input class="form-control form-control-user" type="number" name="state" placeholder="状态" value="{{ cloth.state }}" min="0" max="1">
+        </p>
+        <p>
+            <select name="pinlei" id="pinlei" class="form-control form-control-user">
+                <option value="">品类</option>
+                {% for p in pinlei %}
+                    <option value="{{ p.id }}">{{ p.pinlei }}</option>
+                {% endfor %}
+            </select>
+        </p>
+        <p>
+            <select name="fenlei" id="fenlei" class="form-control form-control-user">
+                <option value="">分类</option>
+            </select>
+        </p>
+        <p>{% if change %}商品图片{% endif %}
+            <input class="form-control form-control-user" type="file" name="picture" placeholder="商品图片"
+                   value="{{ cloth.picture }}" accept="image/*">
+        </p>
+
+        <p>
+            <input id="submit" class="btn btn-primary btn-block" type="submit" value="{{ msg }}">
+        </p>
+        <p style="text-align: center;font-size: 13px;color: red">{{ msg1 }}</p>
+        <p style="text-align: center;font-size: 13px;color: green">{{ msg2 }}</p>
+    </form>
+
+{% endblock %}
+{% block script %}
+{#    <script src="/static/ckeditor/ckeditor/ckeditor.js"></script>#}
+    <script type="text/javascript" src="/static/customer/js/vendor/jquery-1.12.4.min.js"></script>
+    <script type="text/javascript">
+        {#CKEDITOR.replace("description", {uiColor: "#64bad7"});#}
+        $("#pinlei").change(function () {
+            var pinlei_id = $("#pinlei option:selected").val();
+            var post_data = {"pinlei_id":pinlei_id,"csrfmiddlewaretoken":"{{ csrf_token }}"};
+            console.log(pinlei_id);
+            $.ajax({
+                url:"/merchant/get_fenlei",
+                type:"post",
+                data:post_data,
+                dataType:"json",
+                success:function (data) {
+                    console.log(data["data"]);
+                    var content='<option value="">分类</option>';
+                    $.each(data["data"], function(i, item){
+                        content+='<option value='+item[1]+'>'+item[0]+'</option>'
+                    });
+                    $('#fenlei').html(content);
+                },
+                error:function (error) {
+                    console.log(error);
+                }
+            })
+        });
+        $(".btn-block").mouseover(function () {
+            {#alert("asda");#}
+            $("input").each(function () {
+                if ($(this).val()==""){
+                    $(".btn").attr("disabled",true)
+                }else{
+                    $(".btn").attr("disabled",false)
+                }
+            })
+        })
+    </script>
+{% endblock %}

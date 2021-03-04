@@ -1,0 +1,105 @@
+{% extends "customer/base.html" %}
+{% block search %}
+{% endblock %}
+{% block title %}
+    星服装-支付
+{% endblock %}
+{% load my_filter %}
+{% block style %}
+    <style type="text/css">
+    .fg {
+        display: -webkit-box;
+        display: -moz-box;
+        white-space: pre-wrap;
+        word-wrap: break-word;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 1;
+    }
+    .common_list_con {
+        border-top: 2px solid #8787e9;
+    }
+{% endblock %}
+</style>
+{% block content %}
+    <h3 class="common_title" style="margin-top: 80px;">确认收货地址</h3>
+
+    <div class="common_list_con clearfix">
+        <dl>
+            <dt>寄送到：</dt>
+            <dd><select name="address" id="">
+                {% for address in address_list %}
+                    {% if address.state == 1 %}
+                        <option value="{{ address.id }}" selected>{{ address.address }}
+                            ({{ address.receiver }}收) {{ address.phone }}</option>
+                    {% else %}
+                        <option value="{{ address.id }}">{{ address.address }}
+                            ({{ address.receiver }}收) {{ address.phone }}</option>
+                    {% endif %}
+                {% endfor %}
+            </select></dd>
+        </dl>
+        <a href="/customer/ucs/" class="edit_site" style="background: #8787e9">编辑收货地址</a>
+
+    </div>
+
+    <h3 class="common_title">支付方式</h3>
+    <div class="common_list_con clearfix">
+        <div class="pay_style_con clearfix">
+            <input type="radio" name="pay_style" checked>
+            <label class="zhifubao" style="height: 37px;width: 99px"></label>
+        </div>
+    </div>
+
+    <h3 class="common_title">商品列表</h3>
+
+    <div class="common_list_con clearfix">
+        <ul class="goods_list_th clearfix">
+            <li class="col01">商品名称</li>
+            <li class="col02">颜色/尺寸</li>
+            <li class="col03">单价</li>
+            <li class="col04">数量</li>
+            <li class="col05">小计</li>
+        </ul>
+        {% for o_i in order_info %}
+            <ul class="goods_list_td clearfix">
+                <li class="col02" style="margin-left:45px"><img src="/static/customer/img/clothes/{{ o_i.goods_picture }}"></li>
+                <li class="col03 fg">{{ o_i.goods_name }}</li>
+                <li class="col04">{{ o_i.goods_color }}/{{ o_i.goods_size }}</li>
+                <li class="col05">{{ o_i.goods_price }}元</li>
+                <li class="col06">{{ o_i.goods_number }}</li>
+                <li class="col07">{{ o_i.goods_total }}元</li>
+            </ul>
+        {% endfor %}
+    </div>
+
+    <h3 class="common_title">总金额结算</h3>
+
+    <div class="common_list_con clearfix">
+        <div class="settle_con">
+            <div class="total_goods_count">共<em>{{ order|get_number }}</em>件商品，总金额<b>{{ order.order_total }}元</b>
+            </div>
+            <div class="transit">运费：<b>0元</b></div>
+            <div class="total_pay">实付款：<b>{{ order.order_total }}元</b></div>
+        </div>
+    </div>
+
+    <div class="order_submit clearfix">
+        <a href="/user/pay/?order_id={{ order.id }}&address=" id="order_btn" style="background: #8787e9">去付款</a>
+    </div>
+{% endblock %}
+{% block script %}
+    <script type="text/javascript" src="/static/customer/js/vendor/jquery-1.12.4.min.js"></script>
+    <script type="text/javascript">
+        address = $("select option:selected").val();
+        $("select").change(function () {
+            var address = $("select option:selected").val();
+            href = $(".order_submit a").attr("href").split("&")[0];
+            $(".order_submit a").attr("href", href + "&address=" + address);
+        });
+        href = $(".order_submit a").attr("href").split("&")[0];
+        $(".order_submit a").attr("href", href + "&address=" + address);
+    </script>
+{% endblock %}
+

@@ -1,0 +1,485 @@
+{% extends "customer/base.html" %}
+{% load my_filter %}
+{% block title %}
+    星服装-详情页
+{% endblock %}
+{% block search %}
+{% endblock %}
+{% block style %}
+    <style type="text/css">
+        .conWrap {
+            border-top: 1px solid #d3d3d3;
+            margin-top: 2px;
+        }
+
+        .container {
+
+        }
+
+        .topWrap {
+            overflow: hidden;
+        }
+
+        .nz-item-info-f {
+            float: left;
+            height: auto;
+            width: 400px;
+        }
+
+        .preview {
+            margin-left: 51px;
+            width: 420px;
+            position: relative;
+        }
+
+        .bigImg {
+            position: relative;
+            float: left;
+            width: 400px;
+            height: 400px;
+            overflow: hidden;
+            border: 1px solid #f5f5f5;
+            text-align: center;
+        }
+
+        #midimg {
+            max-width: 400px;
+            height: 400px;
+        }
+
+        .smallImg {
+            position: relative;
+            margin-top: 1px;
+            padding: 17px 0 10px 0;
+            width: 424px;
+            margin-left: -22px;
+            overflow: hidden;
+        }
+
+        #imageMenu {
+            height: 57px;
+            width: 400px;
+            overflow: hidden;
+            margin-left: 33px;
+            float: left;
+        }
+
+        #imageMenu li {
+            height: 51px;
+            width: 51px;
+            overflow: hidden;
+            float: left;
+            margin-right: 15px;
+            text-align: center;
+            border: 2px solid #fff;
+        }
+
+        #onlickImg {
+            border: 2px solid #da3a4c !important;
+        }
+
+        .Topdetail-mid {
+            margin-left: 131px;
+            width: 547px;
+            float: left;
+            padding-right: 15px;
+            padding-bottom: 10px;
+        }
+
+        .labelWrap {
+            margin-right: 5px;
+            float: left;
+        }
+
+        .detail-new {
+            width: 548px;
+            height: 60px;
+            background: url(https://img.hznzcn.com/imgs/productItem/moneyBgImg.jpg) no-repeat;
+        }
+
+        .midmoneyTop {
+            padding: 0 12px;
+            padding-top: 17px;
+            overflow: hidden;
+        }
+
+        .wholesale {
+            width: 256px;
+            float: left;
+        }
+
+        .moneySpan1 {
+            color: #767676;
+        }
+
+        .moneySpan2 {
+            color: #db2121;
+            font-size: 13px;
+        }
+
+        .moneySpan3 {
+            color: #db2121;
+            font-size: 26px;
+            line-height: 26px;
+            font-weight: bold;
+        }
+
+        .viewDetails {
+            border-bottom: 1px dashed #dcdcdc;
+        }
+
+        .mid-brand {
+            padding: 6px 4px 11px 4px;
+            position: relative;
+            font-size: 12px;
+        }
+
+        .midbrand-1 {
+            color: #909090;
+            float: left;
+            margin-top: 5px;
+            width: 150px;
+            padding-right: 10px;
+        }
+
+        .difWid {
+            width: 170px;
+            padding-left: 32px;
+            padding-right: 10px;
+        }
+
+        .midbrand-2 {
+            float: left;
+            margin-top: 5px;
+            color: #909090;
+            border-right: none;
+        }
+
+        .selWrapCont {
+            position: relative;
+        }
+
+        .props {
+            overflow: hidden;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .prop-name {
+            color: #767676;
+            float: left;
+            line-height: 30px;
+            text-align: left;
+            margin-top: 7px;
+            margin-right: 10px;
+            font-size: 12px;
+        }
+
+        .standGg {
+            margin-top: 7px;
+            margin-left: 5px;
+            width: 495px;
+            color: #525252;
+        }
+
+        .numT {
+            height: 43px;
+            border-bottom: 1px dotted #e5e5e5;
+        }
+
+        .fortifyBox li {
+            width: 26px;
+            height: 26px;
+            line-height: 22px;
+            cursor: pointer;
+            background: #f5f5f5;
+            vertical-align: middle;
+            background-image: url(https://img.hznzcn.com/imgs/productItem/bg.png);
+            background-repeat: no-repeat;
+            border: 1px solid #d9d9d9;
+            background-position: -32px -52px;
+            display: inline-block;
+            margin-right: -1px;
+            margin-left: -1px;
+            -moz-user-select: none;
+            -khtml-user-select: none;
+            user-select: none;
+        }
+
+        .meg-lits {
+            width: 545px;
+            height: 49px;
+            line-height: 49px;
+            background-color: #fbfbfb;
+        }
+
+        .list-prics {
+            padding-left: 15px;
+            width: 300px;
+            color: #db2121;
+            font-weight: bold;
+            font-size: 16px;
+            border-right: 1px solid #f0f0f0;
+        }
+
+        .total {
+            width: 170px;
+            float: right;
+            line-height: 49px;
+        }
+
+        .mid-shopping {
+            margin-top: 22px;
+            height: 40px;
+        }
+
+        .shopCat {
+            background: #f4783a;
+        }
+
+        .aLabel {
+            width: 118px;
+            height: 38px;
+            line-height: 38px;
+            text-align: center;
+            display: inline-block;
+            background: #ed3142;
+            font-size: 16px;
+            font-weight: bold;
+            margin-right: 13px;
+            color: #ffffff;
+            border: 1px solid transparent;
+        }
+
+        .linkWrapBox {
+            float: right;
+        }
+    </style>
+{% endblock %}
+
+{% block slider-wrap %}
+    <div style="height:100px"></div>
+{% endblock %}
+
+{% block content %}
+    <div class="conWrap">
+        <div class="container" style="width: 1157px;min-height:550px">
+            <div class="topWrap">
+                <div class="nz-item-info-f">
+                    <div class="preview">
+                        <div class="bigImg">
+                            <img id="midimg"
+                                 src="/static/customer/img/clothes/{{ pictures|first }}">
+                        </div>
+                        <div class="smallImg">
+                            <div id="imageMenu">
+                                <ul>
+                                    {% for picture in pictures %}
+                                        {% if picture == forloop.first %}
+                                            <li id="onlickImg">
+                                                <a class="gallery_selected" target="_blank" style="cursor: pointer">
+                                                    <img src="/static/customer/img/clothes/{{ picture }}">
+                                                </a>
+                                            </li>
+                                        {% else %}
+                                            <li>
+                                                <a class="gallery_selected" target="_blank" style="cursor: pointer">
+                                                    <img src="/static/customer/img/clothes/{{ picture }}">
+                                                </a>
+                                            </li>
+                                        {% endif %}
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="Topdetail-mid">
+                    <div class="detail-midtitle">
+                        <div class="labelWrap"></div>
+                        <h1 style="font-weight: bold;font-size: 20px;">{{ cloth.title }}</h1>
+                    </div>
+                    <div class="detail-new">
+                        <div class="midmoneyTop">
+                            <p class="wholesale">
+                                <span class="moneySpan1">价格:</span>
+                                <span class="moneySpan2">￥</span>
+                                <span class="moneySpan3"><label id="price">{{ cloth.price }}</label></span>
+                            </p>
+                            {% if cloth.discount_price > 0 %}
+                            <p class="wholesale">
+                                <span class="moneySpan1">优惠价:</span>
+                                <span class="moneySpan2">￥</span>
+                                <span class="moneySpan3"><label id="dis_price">{{ cloth.discount_price }}</label></span>
+                            </p>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="viewDetails">
+                        <div class="mid-brand">
+                            <span class="midbrand-1" style="width: 170px">
+                                <p id="productCoodsNo" style="color: black;">货号：{{ cloth.coodsNo }}</p>
+                            </span>
+
+                            <span class="midbrand-1 difWid">重量：<i>
+                                <span id="ProductWeight" style="color: black">{{ cloth.weight }}</span>克（g）</i>
+                            </span>
+                            <span class="midbrand-2 difWid" style="width: 182px">上架时间：<i>
+                                <span id="ProductWeight" style="color: black">{{ cloth.date|date:"Y-m-d" }}</span></i>
+                            </span>
+                            <div style="clear: both"></div>
+                        </div>
+                    </div>
+                    <form method="post">
+                    {% csrf_token %}
+                    <div class="selWrapCont">
+                        <div class="props propsImg">
+                            <div class="prop-name">选择颜色:</div>
+                            <div id="color"
+                                 style="width:400px; display:inline-block;float:left;margin-top: 11px;margin-left:10px">
+                                {% for color in colors %}
+                                    <label style="margin-right:10px"><input type="radio" name="color" value="{{ color }}">{{ color }}</label>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="props">
+                        <div class="prop-name">选择尺码:</div>
+                        <div class="standGg">
+                            <select name="size" id="size" style="margin-left:10px;">
+                                <option value="S">S</option>
+                                <option value="M">M</option>
+                                <option value="L">L</option>
+                                <option value="XL">XL</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="props">
+                        <div class="prop-name">选择数量:</div>
+                        <div class="standGg">
+                            <div class="numT">
+                                <div class="fortifyBox">
+                                    <input type="number" class="iptText" name="number" value="1"
+                                           min=1 style="width: 45px;margin-left: 10px;text-align: center" id="number">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="meg-lits">
+                        <div class="total" style="margin-top: 0px">
+                            总价:<span class="moneySpan3" id="total" style="line-height:49px;">
+                            {% if cloth.discount_price > 0 %}
+                                ￥{{ cloth.discount_price }}
+                            {% else %}
+                                ￥{{ cloth.price }}
+                            {% endif %}
+                        </span>
+                        </div>
+                    </div>
+                    <div class="mid-shopping">
+                        <div class="linkWrapBox" style="display: block;">
+                            <a href="javascript:;" id="addCart" class="aLabel shopCat" cloth_id="{{ cloth.id }}"
+                               style="background:#f4783a" onclick="addCart(this)" name="submit">加入购物车</a>
+                            <input type="hidden" name="cloth_id" value="{{ cloth.id }}">
+                            <input href="javascript:;" type="submit" class="aLabel" cloth_id="{{ cloth.id }}"
+                               style="cursor: pointer;" value="立即购买">
+                        </div>
+                    </div>
+                    </form>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+{% endblock %}
+{% block script %}
+    <script type="text/javascript" src="/static/customer/js/vendor/jquery-1.12.4.min.js"></script>
+    <script type="text/javascript">
+        $('#imageMenu ul li a img').hover(function () {
+            var src = $(this)[0].src;
+            $('#midimg').attr("src", src);
+            {#console.log(src);#}
+            $(this).parents("li").attr("id", "onlickImg");
+            $(this).parents("li").siblings().removeAttr("id", "onlickImg");
+        });
+        $('.iptText').blur(function () {
+            if ($(this).val() < 1) {
+                $(this).val("1");
+            }
+        });
+        $("#number").change(function () {
+            var price = parseFloat($("#price").text()).toFixed(2);
+            var dis_price = parseFloat($("#dis_price").text()).toFixed(2);
+            var number = parseFloat($("#number").val());
+            if (dis_price > 0){
+                var total = dis_price * number;
+            }else{
+                var total = price * number;
+            }
+            str_total = String(total);
+            if(str_total.indexOf(".")>0){
+                $("#total").text("￥"+str_total);
+            }else{
+                $("#total").text("￥"+str_total+".0");
+            }
+            {#console.log(price);#}
+            {#console.log(dis_price);#}
+            {#console.log(total);#}
+        });
+        function addCart(obj) {
+            var color = $("input[name='color']:checked").val();
+            var size = $("#size option:selected").val();
+            var number = $("input[name='number']").val();
+            var total = $.trim($("#total").text()).substring(1);
+            var cloth_id = $(obj).attr("cloth_id");
+            var login = $("li[class='hidden-xs']").children("a").text();
+            var post_data = {"color":color,"size":size,"number":number,"total":total,"cloth_id":cloth_id,
+                            "csrfmiddlewaretoken":"{{ csrf_token }}"};
+            console.log(post_data);
+            console.log(login);
+            if(login.indexOf("登录")!=-1){
+                var url = "/login?next=customer/detail/"+cloth_id;
+                window.location.href=url;
+            }else{
+                $.ajax({
+                    url:"/user/addcart/",
+                    type:"post",
+                    data:post_data,
+                    success:function (data) {
+                        alert(data["data"]);
+                    },
+                    error:function (error) {
+                        console.log(error);
+                    }
+                })
+            }
+        }
+        $("a[name='submit']").hover(function () {
+            var color = $("input[name='color']:checked").val();
+            if(color == undefined){
+                $(this).attr("title","请选择规格");
+                $(this).removeAttr("onclick");
+            }else{
+                $(this).removeAttr("title");
+                $(this).attr("onclick","addCart(this)")
+            }
+        });
+        $("input[type='submit']").hover(function () {
+            var color = $("input[name='color']:checked").val();
+            if(color == undefined){
+                $(this).attr("title","请选择规格");
+                $(this).attr("disabled","disabled");
+            }
+        });
+        $("input[name='color']").change(function () {
+            var color = $("input[name='color']:checked").val()
+            if(color){
+                $("input[type='submit']").removeAttr("disabled");
+                $("input[type='submit']").removeAttr("title");
+            }
+        })
+    </script>
+{% endblock %}
+
+

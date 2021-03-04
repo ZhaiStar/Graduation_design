@@ -1,0 +1,178 @@
+{% extends "customer/base.html" %}
+{% load my_filter %}
+{% block title %}
+    星服装-购物车
+{% endblock %}
+{% block style %}
+    <style type="text/css">
+    .nothing{
+            width: 1146px;
+            {#border: 1px solid;#}
+            min-height: 600px;
+            line-height: 400px;
+            font-size: 25px;
+            margin: 0 auto;
+            text-align: center;
+            {#background: #e5e5e5;#}
+        }
+    </style>
+{% endblock %}
+{% block slider-wrap %}
+
+{% endblock %}
+{% block search %}
+{% endblock %}
+{% block content %}
+    {% if carts|length > 0 %}
+        <div style="margin: 80px 0">
+        <ul class="cart_list_th clearfix">
+            <li class="col01" style="width: 21%;margin-left: 79px">商品名称</li>
+            <li class="col03" style="width: 28%;">单价</li>
+            <li class="col04" style="width: 5%;">数量</li>
+            <li class="col05" style="width: 27%;">总计</li>
+            <li class="col06" style="width: 7%;">操作</li>
+        </ul>
+        <form method="post">
+         {% csrf_token %}
+            {% for cart in carts %}
+                <ul class="cart_list_td clearfix">
+                    <li class="col01">
+                        <input class="goods_check" type="checkbox" name="checked_{{ forloop.counter }}"
+                               value="{{ cart.id }}">
+                    </li>
+                    <li class="col02" style="width: 16%;">
+                        <a href="/customer/detail/{{ cart.cloth_id }}">
+                            <img src="/static/customer/img/clothes/{{ cart.picture }}">
+                        </a>
+                    </li>
+                    <li class="col03 fg" style="width: 13%;">
+                        <a href="/customer/detail/{{ cart.cloth_id }}" title="{{ cart.name }}">{{ cart.name|vaild_name }}</a><br>
+                        <p class="c-p-size"><span>颜色 : </span>{{ cart.color }}</p>
+                        <p class="c-p-size"><span>尺寸 : </span>{{ cart.size }}</p>
+                    </li>
+                    <li class="col05" style="width: 18%;">{{ cart.price }}元</li>
+                    <li class="col06" style="width: 15%;">
+    {#                    <div class="num_add" style="border: none">#}
+    {#                        <input type="text" name="number_{{ cart.cloth_id }}"#}
+    {#                               min="1" value="{{ cart.number }}" style="width: 97px">#}
+    {#                    </div>#}
+                        {{ cart.number }}
+                    </li>
+                    <li class="col07" style="width: 16%;"><span class="total">￥{{ cart.total }}</span></li>
+                    <li class="col08"><a href="javascript:;" onclick="delcart({{ cart.id }})"><i class="fa fa-trash"></i></a>
+                </ul>
+            {% endfor %}
+            <ul class="settlements">
+                <li class="col01" style="width: 6%;"><label><input id="all_check" type="checkbox" name="">全选</label></li>
+                <li class="col03" style="width: 79%;">合计(不含运费)：<span>¥</span><em id="check_price">0.00</em>
+                    <br>共计<b id="sum" name="sum">0</b>件商品</li>
+                <li class="col04">
+                    <input type="submit" value="去结算" style="width: 167px;height: 78px;font-size: 24px;color: #fff;background-color: #ff3d3d;border: none;">
+                </li>
+            </ul>
+        </form>
+        </div>
+    {% else %}
+        <div class="nothing">
+            <p>您的购物车暂时没有商品</p>
+        </div>
+    {% endif %}
+
+{% endblock %}
+{% block script %}
+    <script type="text/javascript" src="/static/customer/js/vendor/jquery-1.12.4.min.js"></script>
+    <script type="text/javascript">
+        var check_price = 0;
+        var sum = 0;
+        $("#all_check").click(
+            function () {
+                if (this.checked) {
+                    check_price = 0;
+                    sum = 0;
+                    $(".goods_check").prop("checked", true);
+                    price = $.trim($("span[class='total']").text()).split("￥");
+                    for (p in price) {
+                        console.log(price[p]);
+                        if (price[p].length > 0) {
+                            check_price += parseFloat($.trim(price[p]));
+                            sum += 1;
+                        }
+                    }
+                    $("#check_price").text(check_price);
+                    $("#sum").text(sum);
+                } else {
+                    $(".goods_check").prop("checked", false);
+                    sum = 0;
+                    check_price = 0;
+                    $("#check_price").text(check_price);
+                    $("#sum").text(sum);
+                }
+            }
+        );
+
+        $(".goods_check").each(
+            function () {
+                $(this).click(
+                    function () {
+                        if (!this.checked) {
+                            $("#all_check").prop("checked", false);
+                            sum -= 1;
+                            var total = parseFloat($(this).parent().parent().children("li[class='col07']").text().split("￥")[1]);
+                            check_price -= total;
+                            $("#check_price").text(check_price);
+                            $("#sum").text(sum);
+                        } else {
+                            sum += 1;
+                            var total = parseFloat($(this).parent().parent().children("li[class='col07']").text().split("￥")[1]);
+                            var id = $(this).val();
+                            console.log(id);
+                            var checked_id = $("input[type=hidden]").val();
+                            $("input[type=hidden]").val(checked_id+","+id);
+                            var checked_id = $("input[type=hidden]").val();
+                            console.log(checked_id);
+                            check_price += total;
+                            $("#check_price").text(check_price);
+                            $("#sum").text(sum);
+                        }
+
+                    }
+                );
+
+            }
+        );
+    function delcart(obj) {
+        var post_data = {"cart_id":obj,"csrfmiddlewaretoken":"{{ csrf_token }}"};
+        $.ajax({
+            url:"/user/delcart/",
+            type:"post",
+            data:post_data,
+            success:function (data) {
+                alert(data["data"]);
+            },
+            error:function (error) {
+                console.log(error);
+            }
+        });
+        {#待完成删除该商品#}
+        {#f = $(this).parents("tr").remove();#}
+        {#console.log(f)#}
+    }
+    $("input[type=number]").focus(function(){
+        number = $(this).val();
+        {#console.log(number)#}
+    });
+    $("input[type=number]").change(function () {
+        var price = parseFloat($(this).parent().prev().text().split("￥")[1]);
+        $(this).parent().next().find("span").text("￥"+$(this).val()*price);
+        {#console.log($(this).val())#}
+        ischeck = $(this).parent().next().find("input").prop("checked");
+        if (ischeck){
+            var add = $(this).val()-number;
+            $("#check_price").text(parseFloat($("#check_price").text())+add*price);
+            {#alert("asdad")#}
+        }else{
+            {#alert("23423423")#}
+        }
+    })
+    </script>
+{% endblock %}

@@ -1,0 +1,5 @@
+.idea/
+__pycache__/
+static/admin/img/
+static/customer/img/
+static/merchant/img/

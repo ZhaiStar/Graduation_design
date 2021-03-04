@@ -1,0 +1,88 @@
+<html xml:lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+	<title>星服装-注册</title>
+	<link rel="stylesheet" type="text/css" href="/static/customer/css/reset2.css">
+	<link rel="stylesheet" type="text/css" href="/static/customer/css/main.css">
+	<script type="text/javascript" src="/static/customer/js/jquery-1.12.4.min.js"></script>
+{#	<script type="text/javascript" src="/static/buyer/js/register.js"></script>#}
+</head>
+<body style="background: #4e73df;height: 590px">
+	<div class="register_con" style="min-height: 635px;background: white;">
+		<div class="l_con fl" style="padding-top: 172px">
+			<a class="reg_logo"><img src="/static/customer/img/logo/1.png"></a>
+			<div class="reg_slogan" style="color: #4e73df">足不出户  ·  换新装</div>
+			<div class="reg_banner"></div>
+		</div>
+
+		<div class="r_con fr">
+			<div class="reg_title clearfix">
+				<h1>用户注册</h1>
+				<a href="/login/" style="color: #4e73df">登录</a>
+			</div>
+			<div class="reg_form clearfix">
+				<form method="post">
+                    {% csrf_token %}
+				<ul>
+					<li>
+						<label>用户名:</label>
+						<input type="text" name="user_name" id="user_name" placeholder="请输入用户名">
+						<span class="error_tip">提示信息</span>
+					</li>
+                    <li>
+						<label>账号:</label>
+						<input type="text" name="account" id="account" placeholder="请输入账号">
+						<span class="error_tip">提示信息</span>
+					</li>
+					<li>
+						<label>密码:</label>
+						<input type="password" name="pwd" id="pwd" placeholder="请输入登录密码(6-8位)">
+						<span class="error_tip">提示信息</span>
+					</li>
+					<li>
+						<label>确认密码:</label>
+						<input type="password" name="cpwd" id="cpwd" placeholder="请再次输入登录密码">
+					</li>
+                    <li>
+						<label>手机号:</label>
+						<input type="text" name="phone" id="phone" placeholder="请输入手机号">
+					</li>
+					<li>
+						<label>邮箱:</label>
+						<input type="email" name="email" id="email" placeholder="请输入邮箱">
+
+					</li>
+					<li class="agreement">
+						<input type="checkbox" name="allow" id="allow" >
+						<label for="allow">阅读并同意”星服装用户使用协议“</label>
+						<span class="error_tip" style="display: inline;">{{ msg }}</span>
+					</li>
+					<li class="reg_sub">
+						<input type="submit" id="submit" value="注 册" disabled="disabled" style="background-color: #666666">
+					</li>
+				</ul>				
+				</form>
+			</div>
+
+		</div>
+
+	</div>
+
+	<div class="footer no-mp" style="margin-bottom: 0;background: white;height: 73px">
+		<p>CopyRight © 2020 zstar.club</p>
+	</div>
+    <script type="text/javascript" src="/static/customer/js/vendor/jquery-1.12.4.min.js"></script>
+    <script type="text/javascript">
+        $('#allow').change(function () {
+
+            if ($(this).prop("checked")) {
+                $("#submit").removeAttr("disabled");
+                $("#submit").css("background-color","#4e73df");
+            } else {
+                $("#submit").css("background-color","#666");
+                $("#submit").attr("disabled","disabled");
+            }
+        })
+    </script>
+</body>
+</html>
